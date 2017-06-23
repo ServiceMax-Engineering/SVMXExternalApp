@@ -15,14 +15,30 @@ export default class SVMXExternalApp extends Component {
     super(props);
     this.state = {text: ''};
     this.state = {selectedTab: 'home' };
+    this.state = {receivedText: ''};
   }
 
   componentDidMount() {
+    this.setState({selectedTab: 'home' });
     Linking.addEventListener('url', this._handleOpenURL);
   }
 
-  _handleOpenURL(event) {
+  _handleOpenURL = (event) => {
     console.log(event.url);
+    try {
+      var equalSign = event.url.indexOf('=') + 1;
+      var jsonString = decodeURI(event.url.substring(equalSign, event.url.length));
+      var json = JSON.parse(jsonString);
+      var indent = 2;
+      var prettyJson = JSON.stringify(json, undefined, indent);
+      this.setState({receivedText: prettyJson});
+      this.setState({selectedTab: 'received' });
+    } catch(err)
+    {
+      console.log(err);
+      this.setState({receivedText: err});
+      console.log('Invalid input as JSON');
+    }
   }
 
   handleBtnClick = () => {
@@ -94,17 +110,24 @@ export default class SVMXExternalApp extends Component {
 
         <TabNavigator.Item
           titleStyle={styles.welcome}
-          selected={this.state.selectedTab === 'profile'}
+          selected={this.state.selectedTab === 'received'}
           title="Receive JSON Data"
-          onPress={() => this.setState({ selectedTab: 'profile' })} >
+          onPress={() => this.setState({ selectedTab: 'received' })} >
           <View style={styles.container}>
             <Text style = {styles.welcome}>
-              Hey buddy
-              {"\n"}{"\n"}
-              <Text style = {styles.normaltext}>
                 Received data
-              </Text>
             </Text>
+            <TextInput
+              style={{height: "60%", borderColor: 'gray', borderWidth: 10, fontSize: 20, margin: 20, borderRadius: 10, borderWidth: 2}}
+              multiline = {true}
+              editable = {false}
+              numberOfLines = {4}
+              borderColor = 'gray'
+              placeholderTextColor = '#a9a9a9'
+              onChangeText={(receivedText) => this.setState({receivedText})}
+              value={this.state.receivedText}
+            />
+
           </View>
         </TabNavigator.Item>
       </TabNavigator>
