@@ -36,11 +36,22 @@ export default class SVMXExternalApp extends Component {
   handleOpenURL = (event) => {
     console.log(event.url);
     try {
-      const equalSign = event.url.indexOf('=') + 1;
-      const jsonString = decodeURI(event.url.substring(equalSign, event.url.length));
-      const json = JSON.parse(jsonString);
+      const questionMark = event.url.indexOf('?') + 1;
+      const parameterString = decodeURI(event.url.substring(questionMark, event.url.length));
+      var allParams = {};
+      var paramsArray = parameterString.split('&');
+      for (var i = 0; i < paramsArray.length; i++) {
+        const indexOfEqualSign = paramsArray[i].indexOf('=');
+        var paramKey = paramsArray[i].substring(0, indexOfEqualSign);
+        var paramValue = paramsArray[i].substring(indexOfEqualSign+1, paramsArray[i].length);
+        if (paramKey === 'SVMXRecordData') {
+          allParams[paramKey] = JSON.parse(decodeURIComponent(paramValue));
+        } else {
+          allParams[paramKey] = paramValue;
+        }
+      }
       const indent = 2;
-      const prettyJson = JSON.stringify(json, undefined, indent);
+      const prettyJson = JSON.stringify(allParams, undefined, indent);
       this.setState({ receivedText: prettyJson });
       this.setState({ selectedTab: 'received' });
     } catch (err) {
