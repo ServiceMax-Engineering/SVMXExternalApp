@@ -39,7 +39,7 @@ export default class SVMXExternalApp extends Component {
       const questionMark = event.url.indexOf('?') + 1;
       const parameterString = decodeURI(event.url.substring(questionMark, event.url.length));
       var allParams = {};
-      var paramsArray = parameterString.split('&');
+      const paramsArray = parameterString.split('&');
       for (var i = 0; i < paramsArray.length; i++) {
         const indexOfEqualSign = paramsArray[i].indexOf('=');
         var paramKey = paramsArray[i].substring(0, indexOfEqualSign);
