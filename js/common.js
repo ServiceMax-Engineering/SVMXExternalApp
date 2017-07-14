@@ -20,12 +20,11 @@ export default class SVMXExternalApp extends Component {
     };
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
     this.setState({ selectedTab: 'home' });
     Linking.addEventListener('url', this.handleOpenURL);
     Linking.getInitialURL().then((url) => {
       if (url) {
-        console.log('Initial url is: ' + url);
         this.handleOpenURL({url: url});
       }
     }).catch(err => console.error('An error occurred', err));
@@ -40,7 +39,6 @@ export default class SVMXExternalApp extends Component {
   }
 
   handleOpenURL = (event) => {
-    console.log('url: ' + event.url);
     try {
       const questionMark = event.url.indexOf('?') + 1;
       const parameterString = decodeURI(event.url.substring(questionMark, event.url.length));
@@ -58,22 +56,21 @@ export default class SVMXExternalApp extends Component {
       }
       const indent = 2;
       const prettyJson = JSON.stringify(allParams, undefined, indent);
-      this.setState({ selectedTab: 'received' });
-      this.setState({ receivedText: prettyJson });
+      this.setState({
+        selectedTab: 'received',
+        receivedText: prettyJson
+      });
     } catch (err) {
       console.log(err);
-      console.log('Invalid input as JSON');
     }
   }
 
   handleBtnClick = () => {
-    console.log('this is:', this);
     const data = this.state.text;
     this.launchedSVMXApp(data);
   }
 
   _populateDefaultJSON = () => {
-    console.log('this is:', this);
     const defaultJSONData = this._getJSONData();
     this.setState({ text: defaultJSONData });
   }
