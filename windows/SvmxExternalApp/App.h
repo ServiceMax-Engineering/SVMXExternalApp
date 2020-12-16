@@ -12,6 +12,7 @@ namespace winrt::SvmxExternalApp::implementation
         void OnLaunched(activation::LaunchActivatedEventArgs const&);
         void OnSuspending(IInspectable const&, Windows::ApplicationModel::SuspendingEventArgs const&);
         void OnNavigationFailed(IInspectable const&, Windows::UI::Xaml::Navigation::NavigationFailedEventArgs const&);
+        void OnActivated(Windows::ApplicationModel::Activation::IActivatedEventArgs const& args);
       private:
         using super = AppT<App>;
     };

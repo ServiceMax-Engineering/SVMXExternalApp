@@ -78,3 +78,49 @@ void App::OnNavigationFailed(IInspectable const&, NavigationFailedEventArgs cons
 {
     throw hresult_error(E_FAIL, hstring(L"Failed to load Page ") + e.SourcePageType().Name);
 }
+void App::OnActivated(Windows::ApplicationModel::Activation::IActivatedEventArgs const& args)
+{
+    if (args.Kind() == Windows::ApplicationModel::Activation::ActivationKind::Protocol)
+    {
+        super::OnActivated(args);
+        //auto eventArgs{ args.as<Windows::ApplicationModel::Activation::ProtocolActivatedEventArgs>() };
+
+        // TODO: Handle URI activation.
+        // The received URI is eventArgs.Uri().RawUri().
+        auto protocolActivatedEventArgs{ args.as<Windows::ApplicationModel::Activation::ProtocolActivatedEventArgs>() };
+        // TODO: Handle URI activation  
+        auto receivedURI{ protocolActivatedEventArgs.Uri().RawUri() };
+        /*auto message = "no parameters passed";
+        auto queryString = protocolActivatedEventArgs.Uri().Query;
+        auto absolutePath = protocolActivatedEventArgs.Uri().AbsoluteUri;
+        message = "Query String: {queryString}\n AbsolutePath: {absolutePath}";*/
+        Frame rootFrame = Window::Current().Content().as<Frame>();
+        if (rootFrame == nullptr) {
+            rootFrame = Frame();
+            rootFrame.NavigationFailed({ this, &App::OnNavigationFailed });
+            if (rootFrame.Content() == nullptr)
+            {
+                // When the navigation stack isn't restored navigate to the first page,
+                // configuring the new page by passing required information as a navigation
+                // parameter
+                rootFrame.Navigate(xaml_typename<SvmxExternalApp::MainPage>(), box_value(receivedURI));
+            }
+            // Place the frame in the current Window
+            Window::Current().Content(rootFrame);
+            // Ensure the current window is active
+            Window::Current().Activate();
+        }
+        else {
+            rootFrame.Navigate(xaml_typename<SvmxExternalApp::MainPage>(), box_value(receivedURI));
+            Window::Current().Activate();
+
+        }
+        //rootFrame.Navigate(xaml_typename<SVMXExternalAPP::MainPage>(), box_value(eventArgs.Uri().RawUri()));
+
+    }
+    else {
+        Frame rootFrame = Window::Current().Content().as<Frame>();
+        rootFrame.Navigate(xaml_typename<SvmxExternalApp::MainPage>(), NULL);
+        Window::Current().Activate();
+    }
+}
