@@ -4,10 +4,13 @@ External test app for app to app communication. URL Schemes is 'svmxtest' for th
 Steps:
 1. curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
 2. Open a new shell
-3. nvm install v6.9.4 # Install Node 6.9.4
-4. nvm use 6.9.4
+3. nvm install v10.17.0 # Install Node JS v 8.9.1 and npm v 5.5.1
+4. nvm use 10.17.0
 5. npm install -g react-native-cli
-6. npm install
+6. git clone github.com/ServiceMax-Engineering/svmx-external-app.git
+7. cd svmx-external-app
+8. npm install
+8.1. for ios ---> cd ios --> pod install --> cd ..
 7. sudo launchctl remove com.mcafee.agent.macmn # Stop the virus scanner on MacBook
 8. Running on Android
 8.1. $ANDROID_HOME/tools/emulator -list-avds # List all emulator, say mine is 10.1_WXGA_Tablet_API_25
@@ -24,3 +27,12 @@ Steps:
       "name": "Jack",
       "grade": 5
   }
+10. running on windows:
+
+  cd svmx-external-app
+  npm run start
+
+  open visual studio and select executable file from windows folder and then run.
+
+  For more info check below url.
+  https://microsoft.github.io/react-native-windows/
